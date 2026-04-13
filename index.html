@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+
   <link rel="stylesheet" href="https://www.canvasxpress.org/dist/canvasXpress.css">
   <script src="https://www.canvasxpress.org/dist/canvasXpress.min.js"></script>
 </head>
 
 <body>
 
-  <div id="canvasId" style="width:600px;height:600px;"></div>
+<div id="canvasId" style="width:900px;height:600px;"></div>
 
-  <script>
-    var data = [
-      ["Id","Ticket","Req-Date","Tool","Cost","Division","Op-Date","Operator","Department","Program","Requester","Time"],
-      ["R1",1,"8/6/23","DNA-Seq T/N",4480,"Immuno","8/19/23","Kristin","Research","TRV-AAC1-4","Jason",13],
-      ["R2",2,"6/2/23","DNA-Seq T/N",2790,"Immuno","6/13/23","Travis","Research","NPTX2","Ashley",11]
-      // trimmed for clarity
-    ];
+<script>
+window.onload = function () {
 
-    var config = {
-      colorBy: "Department",
-      graphType: "Sankey",
-      sankeyAxes: ["Department","Division","Requester","Program","Operator","Tool"],
-      sankeyNodesColor: "rgb(255,255,255)",
-      title: "Alluvial Plot",
-      xAxis: ["Ticket"]
-    };
+  // ✅ THIS is the correct Sankey format
+  var data = {
+    y: {
+      vars: ["flow"],
+      smps: [
+        "Department",
+        "Division",
+        "Requester",
+        "Program",
+        "Operator",
+        "Tool"
+      ],
+      data: [
+        ["Immuno > Research > Jason > TRV-AAC1-4 > Kristin > DNA-Seq T/N"],
+        ["Immuno > Research > Ashley > NPTX2 > Travis > DNA-Seq T/N"],
+        ["Immuno > Research > Kimberly > NPTX3 > Sean > DNA-Seq T/N"]
+      ]
+    }
+  };
 
-    new CanvasXpress("canvasId", data, config);
-  </script>
+  var config = {
+    graphType: "Sankey",
+    title: "Alluvial Plot"
+  };
+
+  new CanvasXpress("canvasId", data, config);
+
+};
+</script>
 
 </body>
 </html>

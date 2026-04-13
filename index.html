@@ -9,34 +9,43 @@
 
 <body>
 
-<div id="canvasId" style="width:900px;height:600px;"></div>
+<div id="canvasId" style="width:1000px;height:700px;"></div>
 
 <script>
 window.onload = function () {
 
-  // ✅ THIS is the correct Sankey format
+  // ✅ REAL Sankey format = SOURCE / TARGET / VALUE
   var data = {
+    x: {
+      Source: [
+        "Immuno","Immuno","Immuno",
+        "CV","CV","CV",
+        "Neuro","Neuro","Neuro"
+      ],
+      Target: [
+        "Research","Research","Research",
+        "Research","Research","Research",
+        "Research","Research","Research"
+      ],
+      Value: [
+        1,1,1,
+        1,1,1,
+        1,1,1
+      ]
+    },
     y: {
       vars: ["flow"],
-      smps: [
-        "Department",
-        "Division",
-        "Requester",
-        "Program",
-        "Operator",
-        "Tool"
-      ],
-      data: [
-        ["Immuno > Research > Jason > TRV-AAC1-4 > Kristin > DNA-Seq T/N"],
-        ["Immuno > Research > Ashley > NPTX2 > Travis > DNA-Seq T/N"],
-        ["Immuno > Research > Kimberly > NPTX3 > Sean > DNA-Seq T/N"]
-      ]
+      smps: ["flow"],
+      data: [[1]]
     }
   };
 
   var config = {
     graphType: "Sankey",
-    title: "Alluvial Plot"
+    title: "Alluvial Plot",
+    sankeySource: "Source",
+    sankeyTarget: "Target",
+    sankeyValue: "Value"
   };
 
   new CanvasXpress("canvasId", data, config);

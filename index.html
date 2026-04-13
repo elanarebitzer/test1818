@@ -9,43 +9,91 @@
 
 <body>
 
-<div id="canvasId" style="width:1000px;height:700px;"></div>
+<div id="canvasId" style="width:1200px;height:800px;"></div>
 
 <script>
 window.onload = function () {
 
-  // ✅ REAL Sankey format = SOURCE / TARGET / VALUE
-  var data = {
-    x: {
-      Source: [
-        "Immuno","Immuno","Immuno",
-        "CV","CV","CV",
-        "Neuro","Neuro","Neuro"
-      ],
-      Target: [
-        "Research","Research","Research",
-        "Research","Research","Research",
-        "Research","Research","Research"
-      ],
-      Value: [
-        1,1,1,
-        1,1,1,
-        1,1,1
-      ]
-    },
-    y: {
-      vars: ["flow"],
-      smps: ["flow"],
-      data: [[1]]
-    }
+  // =========================
+  // FULL DATASET (your rows)
+  // =========================
+  const rows = [
+    ["Immuno","Research","Kristin","TRV-AAC1-4","DNA-Seq T/N"],
+    ["Immuno","Research","Travis","NPTX2","DNA-Seq T/N"],
+    ["Immuno","Research","Sean","NPTX3","DNA-Seq T/N"],
+    ["Immuno","Research","Katie","TRC-GCA23-1","RNA-Seq"],
+    ["Immuno","Research","Lindsay","TRC-GCA23-2","CHIP-Seq"],
+
+    ["CV","Research","Travis","SNORD89","RNA-Seq"],
+    ["CV","Research","Zachary","MTHFR","Proteomics"],
+    ["CV","Research","Lindsey","DTWD1","DNA-Seq T/N"],
+    ["CV","Research","Lindsey","DTWD2","Proteomics"],
+    ["CV","Research","Katie","DTWD3","DNA-Seq T/N"],
+
+    ["Neuro","Research","Christine","NECAB3","Proteomics"],
+    ["Neuro","Research","Zachary","SPCS3","RNA-Seq"],
+    ["Neuro","Research","Lindsey","SPCS3","CRISPR"],
+    ["Neuro","Research","Kristin","SPCS3","RNA-Seq"],
+    ["Neuro","Research","Dustin","STK17B","DNA-Seq T/N"],
+    ["Neuro","Research","Gregory","SNHG23","RNA-Seq"],
+    ["Neuro","Research","Travis","SNHG23","MSI"],
+    ["Neuro","Research","Lindsay","SNHG23","DNA-Seq T/N"],
+    ["Neuro","Research","Katie","RAD18","RNA-Seq"],
+    ["Neuro","Research","Gregory","STK17B","DNA-Seq T only"],
+    ["Neuro","Research","Travis","ZPBP","RNA-Seq"],
+    ["Neuro","Research","Christine","LINC01415","RNA-Seq"],
+    ["Neuro","Research","Katie","LEF1","Cut&Run"],
+    ["Neuro","Research","Sean","LEF1","scRNA"],
+    ["Neuro","Research","Zachary","ZPBP","DNA-Seq T/N"],
+    ["Neuro","Research","Christine","LINC01415","DNA-Seq T only"],
+    ["Neuro","Research","Gregory","LEF1","RNA-Seq"],
+    ["Neuro","Research","Sean","LINC01415","scRNA"]
+  ];
+
+  // =========================
+  // BUILD SANKEY EDGES
+  // (Department → Tool is the strongest stable structure)
+  // =========================
+  const edgeMap = {};
+
+  function addEdge(a, b) {
+    const key = a + "||" + b;
+    edgeMap[key] = (edgeMap[key] || 0) + 1;
+  }
+
+  rows.forEach(r => {
+    const dept = r[0];
+    const tool = r[3];
+
+    addEdge(dept, tool);
+  });
+
+  const edges = Object.keys(edgeMap).map(k => {
+    const [source, target] = k.split("||");
+    return {
+      source,
+      target,
+      value: edgeMap[k]
+    };
+  });
+
+  // =========================
+  // FINAL DATA
+  // =========================
+  const data = {
+    nodes: [
+      ...new Set(edges.flatMap(e => [e.source, e.target]))
+    ].map(id => ({ id })),
+
+    edges
   };
 
-  var config = {
+  // =========================
+  // CHART
+  // =========================
+  const config = {
     graphType: "Sankey",
-    title: "Alluvial Plot",
-    sankeySource: "Source",
-    sankeyTarget: "Target",
-    sankeyValue: "Value"
+    title: "Full Dataset Sankey (Department → Tool)"
   };
 
   new CanvasXpress("canvasId", data, config);

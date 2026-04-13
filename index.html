@@ -5,6 +5,20 @@
     <link rel="stylesheet" href="https://www.canvasxpress.org/dist/canvasXpress.css" type="text/css"/>
     <script src="https://www.canvasxpress.org/dist/canvasXpress.min.js"></script>
   </head>
+<!-- Script to initialize the object -->
+<script>
+  var data = {
+    "y": {
+      "vars": ["Gene1"],
+      "smps": ["Smp1", "Smp2", "Smp3"],
+      "data": [[10, 35, 88]]
+    }
+  };
+  var conf = {
+    "graphType": "Bar"
+  };
+  var cX = new CanvasXpress("canvasId", data, conf);
+</script>
 
   <body>
 
